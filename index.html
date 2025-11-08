@@ -1,0 +1,1713 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MONASTERY - Knowledge Preservation Network</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Roboto:wght@400;700;900&display=swap');
+
+        :root {
+            --color-black: #000000;
+            --color-white: #FFFFFF;
+            --color-gray: #333333;
+            --color-border: #444444;
+            --transition: all 0.3s ease;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Roboto', 'Helvetica Neue', 'Arial Black', Arial, sans-serif;
+            font-weight: 400;
+            background-color: var(--color-black);
+            color: var(--color-white);
+            line-height: 1.6;
+            min-height: 100vh;
+            position: relative;
+            overflow-x: hidden;
+        }
+
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-image: 
+                repeating-linear-gradient(45deg, transparent, transparent 35px, rgba(255,255,255,0.03) 35px, rgba(255,255,255,0.03) 70px),
+                repeating-linear-gradient(-45deg, transparent, transparent 35px, rgba(255,255,255,0.02) 35px, rgba(255,255,255,0.02) 70px);
+            pointer-events: none;
+            z-index: 0;
+        }
+
+        .app-container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 40px 20px;
+            position: relative;
+            z-index: 1;
+        }
+
+        header {
+            text-align: center;
+            margin-bottom: 60px;
+            padding: 40px 0;
+            border-bottom: 2px solid var(--color-white);
+            position: relative;
+        }
+
+        .geometric-header {
+            width: 100px;
+            height: 100px;
+            margin: 0 auto 30px;
+            animation: rotate3d 10s linear infinite;
+        }
+
+        @keyframes rotate3d {
+            from { transform: rotateY(0deg) rotateX(0deg); }
+            to { transform: rotateY(360deg) rotateX(360deg); }
+        }
+
+        h1 {
+            font-size: 4rem;
+            font-weight: 900;
+            color: var(--color-white);
+            margin-bottom: 16px;
+            letter-spacing: 8px;
+            text-transform: uppercase;
+        }
+
+        .tagline {
+            font-size: 0.9rem;
+            color: var(--color-white);
+            font-weight: 700;
+            opacity: 0.7;
+            letter-spacing: 3px;
+            text-transform: uppercase;
+        }
+
+        .view {
+            display: none;
+        }
+
+        .view.active {
+            display: block;
+            animation: fadeIn 0.4s ease;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .nav-cards {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 24px;
+            margin-bottom: 40px;
+        }
+
+        .nav-card {
+            background: var(--color-black);
+            border: 2px solid var(--color-white);
+            border-radius: 0;
+            padding: 40px 24px;
+            cursor: pointer;
+            transition: var(--transition);
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .nav-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: var(--color-white);
+            transform: scaleX(0);
+            transform-origin: left;
+            transition: transform 0.3s ease;
+            z-index: 0;
+        }
+
+        .nav-card:hover::before {
+            transform: scaleX(1);
+        }
+
+        .nav-card:hover {
+            color: var(--color-black);
+        }
+
+        .nav-card:hover h3,
+        .nav-card:hover p {
+            color: var(--color-black);
+        }
+
+        .nav-card > * {
+            position: relative;
+            z-index: 1;
+        }
+
+        .nav-card-icon {
+            font-size: 3rem;
+            margin-bottom: 20px;
+            filter: invert(1);
+        }
+
+        .nav-card:hover .nav-card-icon {
+            filter: invert(0);
+        }
+
+        .nav-card h3 {
+            font-size: 1.1rem;
+            font-weight: 900;
+            margin-bottom: 12px;
+            color: var(--color-white);
+            letter-spacing: 2px;
+            text-transform: uppercase;
+        }
+
+        .nav-card p {
+            font-size: 0.85rem;
+            color: var(--color-white);
+            opacity: 0.7;
+            line-height: 1.6;
+            font-weight: 400;
+        }
+
+        .stats-overview {
+            background: var(--color-black);
+            border: 2px solid var(--color-white);
+            border-radius: 0;
+            padding: 40px;
+            margin-bottom: 40px;
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 24px;
+        }
+
+        .stat-item {
+            text-align: center;
+            padding: 16px;
+        }
+
+        .stat-value {
+            font-size: 2.5rem;
+            font-weight: 900;
+            color: var(--color-white);
+            margin-bottom: 8px;
+        }
+
+        .stat-label {
+            font-size: 0.85rem;
+            color: var(--color-white);
+            opacity: 0.6;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .back-button {
+            background: transparent;
+            border: 2px solid var(--color-white);
+            color: var(--color-white);
+            padding: 12px 28px;
+            border-radius: 0;
+            cursor: pointer;
+            font-size: 0.9rem;
+            font-weight: 900;
+            margin-bottom: 24px;
+            transition: var(--transition);
+            text-transform: uppercase;
+            letter-spacing: 2px;
+        }
+
+        .back-button:hover {
+            background: var(--color-white);
+            color: var(--color-black);
+        }
+
+        .content-card {
+            background: var(--color-black);
+            border: 2px solid var(--color-white);
+            border-radius: 0;
+            padding: 40px;
+            margin-bottom: 24px;
+        }
+
+        h2 {
+            font-size: 2rem;
+            font-weight: 900;
+            color: var(--color-white);
+            margin-bottom: 32px;
+            letter-spacing: 3px;
+            text-transform: uppercase;
+            border-bottom: 1px solid var(--color-border);
+            padding-bottom: 16px;
+        }
+
+        h3 {
+            font-size: 1.2rem;
+            font-weight: 900;
+            color: var(--color-white);
+            margin-bottom: 20px;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 8px;
+            font-size: 0.85rem;
+            color: var(--color-white);
+            font-weight: 900;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        input[type="text"],
+        input[type="time"],
+        input[type="number"],
+        input[type="file"],
+        textarea,
+        select {
+            width: 100%;
+            padding: 14px 18px;
+            border: 2px solid var(--color-border);
+            border-radius: 0;
+            font-size: 0.95rem;
+            background: var(--color-black);
+            color: var(--color-white);
+            transition: var(--transition);
+            font-family: 'Roboto', Arial, sans-serif;
+        }
+
+        input:focus,
+        textarea:focus,
+        select:focus {
+            outline: none;
+            border-color: var(--color-white);
+            background: var(--color-gray);
+        }
+
+        textarea {
+            resize: vertical;
+            min-height: 150px;
+            font-family: inherit;
+        }
+
+        button {
+            background: var(--color-white);
+            color: var(--color-black);
+            border: 2px solid var(--color-white);
+            padding: 14px 36px;
+            border-radius: 0;
+            font-size: 0.9rem;
+            cursor: pointer;
+            transition: var(--transition);
+            font-weight: 900;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+        }
+
+        button:hover {
+            background: var(--color-black);
+            color: var(--color-white);
+        }
+
+        button.secondary {
+            background: transparent;
+            color: var(--color-white);
+            border: 2px solid var(--color-border);
+        }
+
+        button.secondary:hover {
+            background: var(--color-white);
+            color: var(--color-black);
+            border-color: var(--color-white);
+        }
+
+        button.danger {
+            background: transparent;
+            color: var(--color-white);
+            border: 2px solid #ff0000;
+        }
+
+        button.danger:hover {
+            background: #ff0000;
+            color: var(--color-white);
+        }
+
+        .timer-display {
+            text-align: center;
+            padding: 60px 20px;
+        }
+
+        .timer-circle {
+            font-size: 5rem;
+            font-weight: 700;
+            color: var(--color-white);
+            margin-bottom: 32px;
+            letter-spacing: 4px;
+        }
+
+        .timer-label {
+            font-size: 1rem;
+            color: var(--color-white);
+            margin-bottom: 40px;
+            opacity: 0.8;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+        }
+
+        .timer-controls {
+            display: flex;
+            gap: 20px;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+
+        .session-info {
+            background: var(--color-gray);
+            border: 1px solid var(--color-border);
+            padding: 20px;
+            border-radius: 0;
+            margin-bottom: 32px;
+            text-align: center;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+        }
+
+        .contemplative-message {
+            background: var(--color-gray);
+            padding: 28px;
+            border-radius: 0;
+            text-align: center;
+            font-size: 1rem;
+            color: var(--color-white);
+            margin: 32px 0;
+            font-style: normal;
+            font-weight: 400;
+            line-height: 1.8;
+            border: 1px solid var(--color-border);
+        }
+
+        .schedule-list {
+            list-style: none;
+        }
+
+        .schedule-item {
+            background: var(--color-black);
+            padding: 20px;
+            border-radius: 0;
+            margin-bottom: 2px;
+            border: 1px solid var(--color-border);
+        }
+
+        .schedule-item strong {
+            color: var(--color-white);
+            font-weight: 900;
+        }
+
+        .active-sabbath {
+            background: var(--color-gray);
+            border: 2px solid var(--color-white);
+            padding: 32px;
+            border-radius: 0;
+            text-align: center;
+            margin-bottom: 32px;
+        }
+
+        .active-sabbath h3 {
+            color: var(--color-white);
+            margin-bottom: 16px;
+        }
+
+        .journal-entry {
+            background: var(--color-black);
+            padding: 24px;
+            border-radius: 0;
+            margin-bottom: 16px;
+            border: 1px solid var(--color-border);
+        }
+
+        .journal-meta {
+            font-size: 0.8rem;
+            color: var(--color-white);
+            margin-bottom: 12px;
+            opacity: 0.6;
+            font-weight: 400;
+        }
+
+        .journal-content {
+            line-height: 1.7;
+            white-space: pre-wrap;
+            font-weight: 400;
+        }
+
+        .privacy-notice {
+            background: var(--color-gray);
+            padding: 24px;
+            border-radius: 0;
+            margin: 32px 0;
+            border: 2px solid var(--color-border);
+            font-size: 0.9rem;
+            color: var(--color-white);
+            font-weight: 400;
+            line-height: 1.7;
+        }
+
+        .chart-container {
+            margin: 32px 0;
+            padding: 24px;
+            background: var(--color-black);
+            border-radius: 0;
+            border: 1px solid var(--color-border);
+        }
+
+        .bar-chart {
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+        }
+
+        .bar-item {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+        }
+
+        .bar-label {
+            min-width: 140px;
+            font-size: 0.85rem;
+            color: var(--color-white);
+            font-weight: 900;
+            text-transform: uppercase;
+        }
+
+        .bar-visual {
+            flex: 1;
+            height: 36px;
+            background: var(--color-white);
+            border-radius: 0;
+            display: flex;
+            align-items: center;
+            padding: 0 16px;
+            color: var(--color-black);
+            font-size: 0.85rem;
+            font-weight: 900;
+            transition: var(--transition);
+        }
+
+        .bar-visual:hover {
+            background: var(--color-gray);
+            color: var(--color-white);
+            border: 2px solid var(--color-white);
+        }
+
+        .unlock-prompt-modal {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0, 0, 0, 0.95);
+            display: none;
+            align-items: center;
+            justify-content: center;
+            z-index: 1000;
+        }
+
+        .unlock-prompt-modal.active {
+            display: flex;
+        }
+
+        .modal-content {
+            background: var(--color-black);
+            border: 3px solid var(--color-white);
+            padding: 50px;
+            border-radius: 0;
+            max-width: 600px;
+            text-align: center;
+        }
+
+        .modal-content h3 {
+            margin-bottom: 32px;
+            font-size: 1.8rem;
+            letter-spacing: 3px;
+            text-transform: uppercase;
+        }
+
+        .modal-content p {
+            margin-bottom: 32px;
+            font-size: 1rem;
+            color: var(--color-white);
+            font-weight: 400;
+            line-height: 1.8;
+        }
+
+        .modal-buttons {
+            display: flex;
+            gap: 20px;
+            justify-content: center;
+        }
+
+        .blocked-apps-list {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin-top: 16px;
+        }
+
+        .app-tag {
+            background: transparent;
+            border: 1px solid var(--color-border);
+            padding: 6px 16px;
+            border-radius: 0;
+            font-size: 0.8rem;
+            color: var(--color-white);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .export-buttons {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 16px;
+            margin-top: 24px;
+        }
+
+        .data-statement {
+            background: var(--color-black);
+            border: 2px solid var(--color-border);
+            padding: 32px;
+            border-radius: 0;
+            margin: 32px 0;
+            line-height: 1.9;
+            font-weight: 400;
+        }
+
+        .data-statement ul {
+            font-weight: 400;
+        }
+
+        .sample-data-notice {
+            background: var(--color-gray);
+            border: 2px solid var(--color-border);
+            padding: 20px;
+            border-radius: 0;
+            margin-bottom: 32px;
+            font-size: 0.85rem;
+            color: var(--color-white);
+            text-align: center;
+            font-weight: 400;
+        }
+
+        .thread-list {
+            list-style: none;
+        }
+
+        .thread-item {
+            background: var(--color-black);
+            border: 1px solid var(--color-border);
+            padding: 20px;
+            margin-bottom: 1px;
+            cursor: pointer;
+            transition: var(--transition);
+        }
+
+        .thread-item:hover {
+            background: var(--color-gray);
+            border-color: var(--color-white);
+        }
+
+        .thread-title {
+            font-size: 1.05rem;
+            font-weight: 900;
+            color: var(--color-white);
+            margin-bottom: 8px;
+        }
+
+        .thread-meta {
+            font-size: 0.8rem;
+            color: var(--color-white);
+            opacity: 0.5;
+            font-weight: 400;
+        }
+
+        .document-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 20px;
+        }
+
+        .document-card {
+            background: var(--color-black);
+            border: 2px solid var(--color-border);
+            padding: 24px;
+            transition: var(--transition);
+            cursor: pointer;
+        }
+
+        .document-card:hover {
+            border-color: var(--color-white);
+            background: var(--color-gray);
+        }
+
+        .document-title {
+            font-size: 1.1rem;
+            font-weight: 900;
+            color: var(--color-white);
+            margin-bottom: 12px;
+        }
+
+        .document-meta {
+            font-size: 0.8rem;
+            color: var(--color-white);
+            opacity: 0.6;
+            margin-bottom: 8px;
+            font-weight: 400;
+        }
+
+        .document-description {
+            font-size: 0.85rem;
+            color: var(--color-white);
+            opacity: 0.8;
+            line-height: 1.6;
+            margin-top: 12px;
+            font-weight: 400;
+        }
+
+        .tags {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            margin-top: 12px;
+        }
+
+        .tag {
+            background: transparent;
+            border: 1px solid var(--color-border);
+            padding: 4px 12px;
+            font-size: 0.75rem;
+            color: var(--color-white);
+            opacity: 0.7;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .mentorship-item {
+            background: var(--color-black);
+            border: 1px solid var(--color-border);
+            padding: 20px;
+            margin-bottom: 16px;
+            cursor: pointer;
+            transition: var(--transition);
+        }
+
+        .mentorship-item:hover {
+            background: var(--color-gray);
+            border-color: var(--color-white);
+        }
+
+        .encrypted-badge {
+            display: inline-block;
+            background: transparent;
+            border: 1px solid var(--color-white);
+            padding: 4px 10px;
+            font-size: 0.7rem;
+            margin-bottom: 8px;
+            letter-spacing: 1px;
+        }
+
+        .ar-demo {
+            background: var(--color-gray);
+            border: 2px solid var(--color-border);
+            padding: 40px;
+            text-align: center;
+            margin: 24px 0;
+        }
+
+        .ar-demo-text {
+            font-size: 0.95rem;
+            line-height: 1.8;
+            opacity: 0.9;
+            font-weight: 400;
+        }
+
+        .category-icon {
+            width: 60px;
+            height: 60px;
+            margin: 0 auto 16px;
+        }
+
+        .profile-section {
+            margin-bottom: 32px;
+            padding-bottom: 32px;
+            border-bottom: 1px solid var(--color-border);
+        }
+
+        .profile-stat {
+            display: flex;
+            justify-content: space-between;
+            padding: 12px 0;
+            border-bottom: 1px solid var(--color-border);
+        }
+
+        .upload-standards {
+            background: var(--color-gray);
+            border-left: 3px solid var(--color-white);
+            padding: 20px;
+            margin: 24px 0;
+            font-size: 0.9rem;
+            line-height: 1.7;
+            font-weight: 400;
+        }
+
+        @media (max-width: 768px) {
+            h1 {
+                font-size: 2.5rem;
+                letter-spacing: 4px;
+            }
+
+            .nav-cards {
+                grid-template-columns: 1fr;
+            }
+
+            .timer-circle {
+                font-size: 3rem;
+            }
+
+            .app-container {
+                padding: 20px 16px;
+            }
+
+            .document-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .geometric-header {
+                width: 80px;
+                height: 80px;
+            }
+
+            h2 {
+                font-size: 1.5rem;
+                letter-spacing: 2px;
+            }
+        }
+
+        /* Geometric SVG animations */
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.6; }
+        }
+
+        .nav-card svg {
+            animation: pulse 3s ease-in-out infinite;
+        }
+
+        .nav-card:hover svg {
+            animation: none;
+            opacity: 1;
+        }
+    </style>
+</head>
+<body>
+    <div class="app-container">
+        <header>
+            <div class="geometric-header">
+                <svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+                    <polygon points="50,10 90,35 90,65 50,90 10,65 10,35" fill="none" stroke="white" stroke-width="1.5"/>
+                    <polygon points="50,25 75,40 75,60 50,75 25,60 25,40" fill="none" stroke="white" stroke-width="1"/>
+                    <circle cx="50" cy="50" r="8" fill="none" stroke="white" stroke-width="1.5"/>
+                </svg>
+            </div>
+            <h1>MONASTERY</h1>
+            <p class="tagline">Knowledge Preservation for the Coming Dark Age</p>
+        </header>
+
+        <!-- Home View -->
+        <div id="homeView" class="view active">
+            <div class="sample-data-notice">
+                <strong>DIGITAL SCRIPTORIUM FOR CIVILIZATIONAL CONTINUITY</strong><br>
+                Preserving human knowledge through depth over speed, quality over quantity.<br>
+                Built for a coming Dark Age. No algorithmic feeds. No engagement metrics. Pure scholarship.
+            </div>
+
+            <div class="stats-overview">
+                <h3 style="text-align: center; margin-bottom: 32px; text-transform: uppercase; letter-spacing: 3px;">Knowledge Archive Status</h3>
+                <div class="stats-grid">
+                    <div class="stat-item">
+                        <div class="stat-value" id="todayFocusTime">127</div>
+                        <div class="stat-label">Active Threads</div>
+                    </div>
+                    <div class="stat-item">
+                        <div class="stat-value" id="todaySessions">43</div>
+                        <div class="stat-label">Documents Archived</div>
+                    </div>
+                    <div class="stat-item">
+                        <div class="stat-value" id="journalEntries">8</div>
+                        <div class="stat-label">Mentorships Active</div>
+                    </div>
+                    <div class="stat-item">
+                        <div class="stat-value" id="nextSabbath">24/7</div>
+                        <div class="stat-label">Chronological Order</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="nav-cards">
+                <div class="nav-card" onclick="showView('forumsView')">
+                    <svg class="nav-card-icon" viewBox="0 0 60 60" style="width: 60px; height: 60px;">
+                        <polygon points="30,5 55,18 55,42 30,55 5,42 5,18" fill="none" stroke="white" stroke-width="2"/>
+                        <line x1="30" y1="5" x2="30" y2="55" stroke="white" stroke-width="1"/>
+                        <line x1="5" y1="18" x2="55" y2="42" stroke="white" stroke-width="1"/>
+                    </svg>
+                    <h3>Forums</h3>
+                    <p>Disciplinary discussions in chronological order</p>
+                </div>
+
+                <div class="nav-card" onclick="showView('libraryView')">
+                    <svg class="nav-card-icon" viewBox="0 0 60 60" style="width: 60px; height: 60px;">
+                        <rect x="10" y="10" width="40" height="40" fill="none" stroke="white" stroke-width="2"/>
+                        <line x1="30" y1="10" x2="30" y2="50" stroke="white" stroke-width="1"/>
+                        <line x1="10" y1="30" x2="50" y2="30" stroke="white" stroke-width="1"/>
+                    </svg>
+                    <h3>Document Library</h3>
+                    <p>Archived texts and PDFs for preservation</p>
+                </div>
+
+                <div class="nav-card" onclick="showView('arView')">
+                    <svg class="nav-card-icon" viewBox="0 0 60 60" style="width: 60px; height: 60px;">
+                        <polygon points="30,10 50,22.5 50,37.5 30,50 10,37.5 10,22.5" fill="none" stroke="white" stroke-width="2"/>
+                        <circle cx="30" cy="30" r="8" fill="none" stroke="white" stroke-width="2"/>
+                    </svg>
+                    <h3>AR-Enhanced Reading</h3>
+                    <p>Project annotations onto physical books</p>
+                </div>
+
+                <div class="nav-card" onclick="showView('mentorshipView')">
+                    <svg class="nav-card-icon" viewBox="0 0 60 60" style="width: 60px; height: 60px;">
+                        <polygon points="30,5 52,15 52,35 30,55 8,35 8,15" fill="none" stroke="white" stroke-width="2"/>
+                        <polygon points="30,15 42,22 42,33 30,45 18,33 18,22" fill="none" stroke="white" stroke-width="1.5"/>
+                    </svg>
+                    <h3>Encrypted Mentorship</h3>
+                    <p>Private student-teacher communication</p>
+                </div>
+
+                <div class="nav-card" onclick="showView('uploadView')">
+                    <svg class="nav-card-icon" viewBox="0 0 60 60" style="width: 60px; height: 60px;">
+                        <circle cx="30" cy="30" r="20" fill="none" stroke="white" stroke-width="2"/>
+                        <line x1="30" y1="20" x2="30" y2="40" stroke="white" stroke-width="2"/>
+                        <line x1="20" y1="30" x2="40" y2="30" stroke="white" stroke-width="2"/>
+                    </svg>
+                    <h3>Upload &amp; Contribute</h3>
+                    <p>Submit documents meeting archival standards</p>
+                </div>
+
+                <div class="nav-card" onclick="showView('profileView')">
+                    <svg class="nav-card-icon" viewBox="0 0 60 60" style="width: 60px; height: 60px;">
+                        <polygon points="15,10 45,10 52,30 45,50 15,50 8,30" fill="none" stroke="white" stroke-width="2"/>
+                        <circle cx="30" cy="30" r="6" fill="none" stroke="white" stroke-width="2"/>
+                    </svg>
+                    <h3>Scholar Profile</h3>
+                    <p>Your contributions and areas of expertise</p>
+                </div>
+
+                <div class="nav-card" onclick="showView('searchView')">
+                    <svg class="nav-card-icon" viewBox="0 0 60 60" style="width: 60px; height: 60px;">
+                        <circle cx="25" cy="25" r="15" fill="none" stroke="white" stroke-width="2"/>
+                        <line x1="36" y1="36" x2="50" y2="50" stroke="white" stroke-width="3"/>
+                    </svg>
+                    <h3>Search Archive</h3>
+                    <p>Find knowledge chronologically</p>
+                </div>
+            </div>
+
+            <div class="privacy-notice" style="border: 2px solid var(--color-border); background: var(--color-gray);">
+                <strong>PRESERVATION PROTOCOL:</strong> All knowledge is archived for physical print. No algorithmic curation. No engagement metrics. No private messaging outside mentorship. Built on open-source protocols for civilizational continuity.
+            </div>
+        </div>
+
+        <!-- Forums View -->
+        <div id="forumsView" class="view">
+            <button class="back-button" onclick="showView('homeView')">← RETURN TO MONASTERY</button>
+            
+            <div class="content-card">
+                <h2>Forums - Chronological Discussion</h2>
+                
+                <div style="margin-bottom: 32px; padding: 20px; background: var(--color-gray); border-left: 3px solid var(--color-white); font-weight: 400; line-height: 1.7;">
+                    Organized by discipline and skill. All threads displayed chronologically. No algorithmic ranking. No popularity metrics. Pure scholarly discourse.
+                </div>
+
+                <h3>Philosophy &amp; Metaphysics</h3>
+                <ul class="thread-list" id="philosophyThreads">
+                    <li class="thread-item">
+                        <div class="thread-title">Bergson's Duration vs. Kantian Intuition: Reconciliation or Irreconcilable?</div>
+                        <div class="thread-meta">Posted by scholasticus • 23 replies • Last: Nov 7, 2025 18:45</div>
+                    </li>
+                    <li class="thread-item">
+                        <div class="thread-title">Reading Group: Plotinus Enneads IV - The Soul</div>
+                        <div class="thread-meta">Posted by neoplatonist_study • 47 replies • Last: Nov 7, 2025 22:15</div>
+                    </li>
+                    <li class="thread-item">
+                        <div class="thread-title">Hegel's Logic as Foundation for Biological Systems Theory</div>
+                        <div class="thread-meta">Posted by dialectician • 31 replies • Last: Nov 6, 2025 14:20</div>
+                    </li>
+                </ul>
+
+                <h3 style="margin-top: 40px;">Ancient Texts &amp; Classical Studies</h3>
+                <ul class="thread-list">
+                    <li class="thread-item">
+                        <div class="thread-title">Translating Aristotle's Physics: Modern vs. Medieval Approaches</div>
+                        <div class="thread-meta">Posted by classicist_translator • 18 replies • Last: Nov 7, 2025 20:30</div>
+                    </li>
+                    <li class="thread-item">
+                        <div class="thread-title">The Eleusinian Mysteries: Reconstructing Ritual Practice from Fragmentary Sources</div>
+                        <div class="thread-meta">Posted by mystery_scholar • 29 replies • Last: Nov 7, 2025 16:00</div>
+                    </li>
+                </ul>
+
+                <h3 style="margin-top: 40px;">Technical Skills &amp; Crafts</h3>
+                <ul class="thread-list">
+                    <li class="thread-item">
+                        <div class="thread-title">Traditional Bookbinding Techniques: Japanese Stab Binding Tutorial</div>
+                        <div class="thread-meta">Posted by craft_keeper • 12 replies • Last: Nov 7, 2025 19:00</div>
+                    </li>
+                    <li class="thread-item">
+                        <div class="thread-title">Preserving Documents: Archival-Quality Paper and Ink Formulations</div>
+                        <div class="thread-meta">Posted by archivist_practitioner • 34 replies • Last: Nov 7, 2025 21:45</div>
+                    </li>
+                    <li class="thread-item">
+                        <div class="thread-title">Mechanical Calculation: Building a Difference Engine from Historical Plans</div>
+                        <div class="thread-meta">Posted by analog_engineer • 56 replies • Last: Nov 6, 2025 23:30</div>
+                    </li>
+                </ul>
+
+                <h3 style="margin-top: 40px;">Sciences &amp; Natural Philosophy</h3>
+                <ul class="thread-list">
+                    <li class="thread-item">
+                        <div class="thread-title">Celestial Navigation Without GPS: Star Charts and Sextant Techniques</div>
+                        <div class="thread-meta">Posted by navigator_traditionalist • 27 replies • Last: Nov 7, 2025 17:20</div>
+                    </li>
+                    <li class="thread-item">
+                        <div class="thread-title">Pharmacology from First Principles: Plant-Based Medicine Compendium</div>
+                        <div class="thread-meta">Posted by ethnobotanist • 41 replies • Last: Nov 7, 2025 15:50</div>
+                    </li>
+                </ul>
+
+                <button style="margin-top: 32px;" onclick="alert('New thread creation requires substantive title and opening post meeting archival standards.')">CREATE NEW THREAD</button>
+            </div>
+        </div>
+
+        <!-- Document Library View -->
+        <div id="libraryView" class="view">
+            <button class="back-button" onclick="showView('homeView')">← RETURN TO MONASTERY</button>
+            
+            <div class="content-card">
+                <h2>Document Library</h2>
+                
+                <div class="upload-standards">
+                    <strong>ARCHIVAL STANDARDS:</strong> All documents preserved for physical print. PDFs and text files only. No videos. No standalone images. Diagrams must be paired with text in PDF format. All uploads require substantive description.
+                </div>
+
+                <div class="document-grid" id="documentGrid">
+                    <div class="document-card">
+                        <div class="document-title">The Dimensionality of Paul Laffoley: A Systematic Exposition</div>
+                        <div class="document-meta">PDF • 4.2 MB • 87 pages</div>
+                        <div class="document-meta">Uploaded by cosmist_archives • Oct 15, 2025</div>
+                        <div class="document-description">Comprehensive analysis of Laffoley's metaphysical system integrating sacred geometry, dimensionality theory, and Russian Cosmist philosophy. Includes original diagrams of the Alchemy series and technical specifications for dimensional machines.</div>
+                        <div class="tags">
+                            <span class="tag">Laffoley</span>
+                            <span class="tag">Cosmism</span>
+                            <span class="tag">Sacred Geometry</span>
+                        </div>
+                        <button class="secondary" style="margin-top: 16px; width: 100%;">DOWNLOAD PDF</button>
+                    </div>
+
+                    <div class="document-card">
+                        <div class="document-title">Classical Meditation Practices: A Technical Manual</div>
+                        <div class="document-meta">PDF • 2.8 MB • 52 pages</div>
+                        <div class="document-meta">Uploaded by contemplative_methods • Nov 1, 2025</div>
+                        <div class="document-description">Evidence-based compilation of pre-modern meditation techniques from Neoplatonic contemplation, Christian hesychasm, and Vedic dhyana traditions. No digital dependencies required.</div>
+                        <div class="tags">
+                            <span class="tag">Meditation</span>
+                            <span class="tag">Neoplatonism</span>
+                            <span class="tag">Practice</span>
+                        </div>
+                        <button class="secondary" style="margin-top: 16px; width: 100%;">DOWNLOAD PDF</button>
+                    </div>
+
+                    <div class="document-card">
+                        <div class="document-title">Emergency Knowledge Codex: Essential Sciences for Civilization Restart</div>
+                        <div class="document-meta">PDF • 12.5 MB • 340 pages</div>
+                        <div class="document-meta">Uploaded by continuity_planning • Sep 20, 2025</div>
+                        <div class="document-description">Comprehensive technical manual covering agriculture, metallurgy, medicine, mathematics, and engineering fundamentals. Designed for post-collapse knowledge transmission.</div>
+                        <div class="tags">
+                            <span class="tag">Survival</span>
+                            <span class="tag">Engineering</span>
+                            <span class="tag">Medicine</span>
+                        </div>
+                        <button class="secondary" style="margin-top: 16px; width: 100%;">DOWNLOAD PDF</button>
+                    </div>
+
+                    <div class="document-card">
+                        <div class="document-title">Hyperbolic Geometry and Non-Euclidean Space: Visualization Techniques</div>
+                        <div class="document-meta">PDF • 6.1 MB • 134 pages</div>
+                        <div class="document-meta">Uploaded by geometer • Oct 28, 2025</div>
+                        <div class="document-description">Advanced treatise on non-Euclidean geometries with hand-drawn diagrams and construction methods. Includes exercises for manual construction without computational aids.</div>
+                        <div class="tags">
+                            <span class="tag">Geometry</span>
+                            <span class="tag">Mathematics</span>
+                            <span class="tag">Non-Euclidean</span>
+                        </div>
+                        <button class="secondary" style="margin-top: 16px; width: 100%;">DOWNLOAD PDF</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- AR Enhanced Reading View -->
+        <div id="arView" class="view">
+            <button class="back-button" onclick="showView('homeView')">← RETURN TO MONASTERY</button>
+            
+            <div class="content-card">
+                <h2>AR-Enhanced Reading</h2>
+                
+                <div class="ar-demo">
+                    <svg viewBox="0 0 200 200" style="width: 150px; height: 150px; margin: 0 auto 24px;">
+                        <rect x="50" y="40" width="100" height="120" fill="none" stroke="white" stroke-width="2" />
+                        <line x1="50" y1="60" x2="150" y2="60" stroke="white" stroke-width="1" opacity="0.5"/>
+                        <line x1="50" y1="80" x2="150" y2="80" stroke="white" stroke-width="1" opacity="0.5"/>
+                        <line x1="50" y1="100" x2="150" y2="100" stroke="white" stroke-width="1" opacity="0.5"/>
+                        <circle cx="100" cy="100" r="30" fill="none" stroke="white" stroke-width="2" stroke-dasharray="5,5"/>
+                        <polygon points="100,80 110,95 100,110 90,95" fill="none" stroke="white" stroke-width="1.5"/>
+                    </svg>
+                    <div class="ar-demo-text">
+                        <strong style="font-size: 1.1rem; display: block; margin-bottom: 16px;">BRIDGE BETWEEN PHYSICAL AND DIGITAL</strong>
+                        Use physical books as markers to project annotations, diagrams, and scholarly notes alongside printed text. ARCore (Android) and ARKit (iOS) enable overlay of digital knowledge on material substrates.
+                    </div>
+                </div>
+
+                <h3>How AR-Enhanced Reading Works</h3>
+                <div style="line-height: 1.8; margin-bottom: 24px; font-weight: 400;">
+                    <p style="margin-bottom: 16px;"><strong>1. SCAN PHYSICAL BOOK:</strong> Point your device camera at the book's cover or specific pages marked as AR-enabled.</p>
+                    <p style="margin-bottom: 16px;"><strong>2. RETRIEVE ANNOTATIONS:</strong> The app recognizes the book and retrieves relevant scholarly annotations, diagrams, and commentary from the Monastery archive.</p>
+                    <p style="margin-bottom: 16px;"><strong>3. PROJECT OVERLAY:</strong> Digital content is projected alongside the physical text, creating an augmented reading experience that preserves the materiality of the book while enhancing comprehension.</p>
+                    <p style="margin-bottom: 16px;"><strong>4. CONTRIBUTE ANNOTATIONS:</strong> Scholars can upload their own annotations and diagrams to be shared with future readers of the same physical text.</p>
+                </div>
+
+                <h3>Technology Requirements</h3>
+                <ul style="list-style: none; padding: 0; font-weight: 400; line-height: 2;">
+                    <li>• ARCore-compatible Android device (Android 7.0+)</li>
+                    <li>• ARKit-compatible iOS device (iPhone 6S or newer)</li>
+                    <li>• Camera access for book recognition</li>
+                    <li>• Physical books with ISBN or visual markers</li>
+                </ul>
+
+                <div class="upload-standards" style="margin-top: 32px;">
+                    <strong>PRESERVATION PHILOSOPHY:</strong> AR enhances but never replaces physical books. Digital annotations serve as supplementary scholarship, ensuring knowledge remains accessible even without technology through the printed word.
+                </div>
+            </div>
+        </div>
+
+        <!-- Mentorship View -->
+        <div id="mentorshipView" class="view">
+            <button class="back-button" onclick="showView('homeView')">← RETURN TO MONASTERY</button>
+            
+            <div class="content-card">
+                <h2>Encrypted Mentorship Channels</h2>
+                
+                <div class="upload-standards">
+                    <strong>END-TO-END ENCRYPTION:</strong> All mentorship communication is encrypted. One-on-one only. No group chats. No private messaging outside mentorship. Text-only communication for focused scholarly transmission.
+                </div>
+
+                <h3>Active Mentorships</h3>
+                <div id="mentorshipList">
+                    <div class="mentorship-item">
+                        <div class="encrypted-badge">🔒 ENCRYPTED</div>
+                        <div class="thread-title">Kantian Critical Philosophy</div>
+                        <div class="thread-meta">Mentor: scholasticus • Student: novice_philosopher</div>
+                        <div class="thread-meta">Last message: Nov 7, 2025 21:00</div>
+                        <div style="margin-top: 12px; font-size: 0.85rem; opacity: 0.6; font-weight: 400;">[Encrypted] Discussing transcendental aesthetic...</div>
+                    </div>
+
+                    <div class="mentorship-item">
+                        <div class="encrypted-badge">🔒 ENCRYPTED</div>
+                        <div class="thread-title">Classical Latin Translation</div>
+                        <div class="thread-meta">Mentor: classicist_translator • Student: latin_learner</div>
+                        <div class="thread-meta">Last message: Nov 7, 2025 19:30</div>
+                        <div style="margin-top: 12px; font-size: 0.85rem; opacity: 0.6; font-weight: 400;">[Encrypted] Review of Cicero's De Officiis passage...</div>
+                    </div>
+                </div>
+
+                <h3 style="margin-top: 40px;">Request Mentorship</h3>
+                <div class="form-group">
+                    <label>Subject Area</label>
+                    <select id="mentorshipSubject">
+                        <option>Philosophy &amp; Metaphysics</option>
+                        <option>Ancient Texts &amp; Classical Studies</option>
+                        <option>Technical Skills &amp; Crafts</option>
+                        <option>Sciences &amp; Natural Philosophy</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label>Specific Topic or Skill</label>
+                    <input type="text" placeholder="e.g., Neoplatonic metaphysics, Ancient Greek translation">
+                </div>
+
+                <div class="form-group">
+                    <label>Request Description (Min 200 characters)</label>
+                    <textarea style="min-height: 120px;" placeholder="Describe your current knowledge level, learning goals, and why you seek mentorship in this area..."></textarea>
+                </div>
+
+                <button>SUBMIT MENTORSHIP REQUEST</button>
+
+                <div style="margin-top: 32px; padding: 20px; background: var(--color-gray); border-left: 3px solid var(--color-white); font-weight: 400; line-height: 1.7;">
+                    <strong>MATCHING PROTOCOL:</strong> Requests are manually reviewed by potential mentors. Mentorships are 1-on-1 relationships focused on deep knowledge transmission. No automated matching algorithms.
+                </div>
+            </div>
+        </div>
+
+        <!-- Upload View -->
+        <div id="uploadView" class="view">
+            <button class="back-button" onclick="showView('homeView')">← RETURN TO MONASTERY</button>
+            
+            <div class="content-card">
+                <h2>Upload &amp; Contribute</h2>
+                
+                <div class="upload-standards">
+                    <strong>ARCHIVAL STANDARDS REQUIRED:</strong><br><br>
+                    • PDFs and text documents only (no video content)<br>
+                    • No standalone images (diagrams must be paired with text in PDF)<br>
+                    • Minimum 200-character substantive description<br>
+                    • All uploads manually reviewed before approval<br>
+                    • Focus on depth, preservation, and print-readiness
+                </div>
+
+                <h3>Choose Upload Type</h3>
+                <div style="display: flex; gap: 16px; margin-bottom: 32px;">
+                    <button class="secondary" onclick="showUploadType('forum')" id="forumUploadBtn">FORUM POST</button>
+                    <button class="secondary" onclick="showUploadType('document')" id="docUploadBtn">DOCUMENT</button>
+                </div>
+
+                <div id="forumUploadForm" style="display: none;">
+                    <h3>New Forum Post</h3>
+                    <div class="form-group">
+                        <label>Category</label>
+                        <select>
+                            <option>Philosophy &amp; Metaphysics</option>
+                            <option>Ancient Texts &amp; Classical Studies</option>
+                            <option>Technical Skills &amp; Crafts</option>
+                            <option>Sciences &amp; Natural Philosophy</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label>Thread Title</label>
+                        <input type="text" placeholder="Substantive title describing discussion topic">
+                    </div>
+                    <div class="form-group">
+                        <label>Opening Post (Min 200 characters)</label>
+                        <textarea style="min-height: 200px;" placeholder="Present your question, thesis, or topic for discussion with sufficient context and depth..."></textarea>
+                    </div>
+                    <button>SUBMIT THREAD FOR REVIEW</button>
+                </div>
+
+                <div id="documentUploadForm" style="display: none;">
+                    <h3>Upload Document</h3>
+                    <div class="form-group">
+                        <label>Document File (PDF or TXT only)</label>
+                        <input type="file" accept=".pdf,.txt">
+                    </div>
+                    <div class="form-group">
+                        <label>Document Title</label>
+                        <input type="text" placeholder="Full title of work">
+                    </div>
+                    <div class="form-group">
+                        <label>Author / Contributor</label>
+                        <input type="text" placeholder="Your name or pseudonym">
+                    </div>
+                    <div class="form-group">
+                        <label>Category</label>
+                        <select>
+                            <option>Philosophy &amp; Metaphysics</option>
+                            <option>Ancient Texts &amp; Classical Studies</option>
+                            <option>Technical Skills &amp; Crafts</option>
+                            <option>Sciences &amp; Natural Philosophy</option>
+                            <option>General Reference</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label>Description (Min 200 characters - REQUIRED)</label>
+                        <textarea style="min-height: 150px;" placeholder="Comprehensive description of document contents, methodology, intended audience, and archival significance. Must meet minimum 200 characters."></textarea>
+                    </div>
+                    <div class="form-group">
+                        <label>Tags (Comma-separated)</label>
+                        <input type="text" placeholder="e.g., Philosophy, Kant, Metaphysics, Critical Theory">
+                    </div>
+                    <button>SUBMIT DOCUMENT FOR REVIEW</button>
+                    <div style="margin-top: 16px; font-size: 0.85rem; opacity: 0.7; font-weight: 400;">
+                        Status after submission: PENDING MANUAL APPROVAL
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Profile View -->
+        <div id="profileView" class="view">
+            <button class="back-button" onclick="showView('homeView')">← RETURN TO MONASTERY</button>
+            
+            <div class="content-card">
+                <h2>Scholar Profile</h2>
+                
+                <div class="profile-section">
+                    <h3>Basic Information</h3>
+                    <div class="profile-stat">
+                        <span style="opacity: 0.7;">Username</span>
+                        <span style="font-weight: 700;">philosopher_monk</span>
+                    </div>
+                    <div class="profile-stat">
+                        <span style="opacity: 0.7;">Joined</span>
+                        <span>September 12, 2025</span>
+                    </div>
+                    <div class="profile-stat">
+                        <span style="opacity: 0.7;">Primary Discipline</span>
+                        <span>Philosophy &amp; Metaphysics</span>
+                    </div>
+                </div>
+
+                <div class="profile-section">
+                    <h3>Areas of Study &amp; Expertise</h3>
+                    <div class="tags">
+                        <span class="tag">Neoplatonism</span>
+                        <span class="tag">Phenomenology</span>
+                        <span class="tag">German Idealism</span>
+                        <span class="tag">Ancient Greek</span>
+                        <span class="tag">Comparative Philosophy</span>
+                    </div>
+                </div>
+
+                <div class="profile-section">
+                    <h3>Contributions to Monastery</h3>
+                    <div class="profile-stat">
+                        <span style="opacity: 0.7;">Forum Threads Created</span>
+                        <span style="font-weight: 700;">7</span>
+                    </div>
+                    <div class="profile-stat">
+                        <span style="opacity: 0.7;">Thread Replies</span>
+                        <span style="font-weight: 700;">94</span>
+                    </div>
+                    <div class="profile-stat">
+                        <span style="opacity: 0.7;">Documents Uploaded</span>
+                        <span style="font-weight: 700;">3</span>
+                    </div>
+                    <div class="profile-stat">
+                        <span style="opacity: 0.7;">Active Mentorships (as Student)</span>
+                        <span style="font-weight: 700;">1</span>
+                    </div>
+                    <div class="profile-stat">
+                        <span style="opacity: 0.7;">Active Mentorships (as Mentor)</span>
+                        <span style="font-weight: 700;">2</span>
+                    </div>
+                </div>
+
+                <div style="margin-top: 32px; padding: 20px; background: var(--color-gray); border-left: 3px solid var(--color-white); font-weight: 400; line-height: 1.7;">
+                    <strong>NO GAMIFICATION:</strong> Numbers shown are purely informational. No reputation scores, no leaderboards, no engagement optimization. Contributions valued for substance, not quantity.
+                </div>
+            </div>
+        </div>
+
+        <!-- Digital Sabbath View (keeping structure but hidden) -->
+        <!-- Search View -->
+        <div id="searchView" class="view">
+            <button class="back-button" onclick="showView('homeView')">← RETURN TO MONASTERY</button>
+            
+            <div class="content-card">
+                <h2>Search Knowledge Archive</h2>
+                
+                <div class="upload-standards">
+                    <strong>NO ALGORITHMIC RANKING:</strong> All search results displayed chronologically. No relevance algorithms. No personalization. Pure chronological order by date.
+                </div>
+
+                <div class="form-group">
+                    <label>Search Query</label>
+                    <input type="text" id="searchQuery" placeholder="Enter keywords to search forums and documents...">
+                </div>
+
+                <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 16px; margin-bottom: 24px;">
+                    <div class="form-group">
+                        <label>Content Type</label>
+                        <select id="searchType">
+                            <option>All</option>
+                            <option>Forums Only</option>
+                            <option>Documents Only</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label>Category</label>
+                        <select id="searchCategory">
+                            <option>All Categories</option>
+                            <option>Philosophy &amp; Metaphysics</option>
+                            <option>Ancient Texts</option>
+                            <option>Technical Skills</option>
+                            <option>Sciences</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label>Date Range</label>
+                        <select id="searchDate">
+                            <option>All Time</option>
+                            <option>Last 7 Days</option>
+                            <option>Last 30 Days</option>
+                            <option>Last 90 Days</option>
+                        </select>
+                    </div>
+                </div>
+
+                <button onclick="performSearch()">SEARCH ARCHIVE</button>
+
+                <div id="searchResults" style="margin-top: 40px; display: none;">
+                    <h3>Search Results (Chronological Order)</h3>
+                    <div class="contemplative-message" style="font-size: 0.9rem;">
+                        Results sorted by date (most recent first). No algorithmic relevance scoring.
+                    </div>
+                    
+                    <ul class="thread-list">
+                        <li class="thread-item">
+                            <div style="display: inline-block; background: transparent; border: 1px solid var(--color-border); padding: 4px 10px; font-size: 0.7rem; margin-bottom: 8px; letter-spacing: 1px;">FORUM THREAD</div>
+                            <div class="thread-title">Hegel's Logic as Foundation for Biological Systems Theory</div>
+                            <div class="thread-meta">Philosophy &amp; Metaphysics • Posted Nov 6, 2025 14:20</div>
+                        </li>
+                        <li class="thread-item">
+                            <div style="display: inline-block; background: transparent; border: 1px solid var(--color-border); padding: 4px 10px; font-size: 0.7rem; margin-bottom: 8px; letter-spacing: 1px;">DOCUMENT</div>
+                            <div class="thread-title">Hyperbolic Geometry and Non-Euclidean Space: Visualization Techniques</div>
+                            <div class="thread-meta">Mathematics • Uploaded Oct 28, 2025</div>
+                        </li>
+                        <li class="thread-item">
+                            <div style="display: inline-block; background: transparent; border: 1px solid var(--color-border); padding: 4px 10px; font-size: 0.7rem; margin-bottom: 8px; letter-spacing: 1px;">FORUM THREAD</div>
+                            <div class="thread-title">Pharmacology from First Principles: Plant-Based Medicine Compendium</div>
+                            <div class="thread-meta">Sciences &amp; Natural Philosophy • Posted Nov 7, 2025 15:50</div>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <!-- Old Lucida views removed -->
+        <div id="sabbathView" class="view" style="display: none;">
+            <button class="back-button" onclick="showView('homeView')">← RETURN TO MONASTERY</button>
+            
+            <div class="content-card">
+                <h2>Digital Sabbath Scheduler</h2>
+                
+                <div class="contemplative-message">
+                    "Rest is not idleness, and to lie sometimes on the grass under trees on a summer's day, listening to the murmur of the water, or watching the clouds float across the sky, is by no means a waste of time."
+                </div>
+
+                <h3>Current Schedules</h3>
+                <ul class="schedule-list" id="sabbathList">
+                    <li class="schedule-item">
+                        <strong>Every Saturday</strong><br>
+                        08:00 AM - 08:00 PM<br>
+                        <div class="blocked-apps-list">
+                            <span class="app-tag">Social Media</span>
+                            <span class="app-tag">Email</span>
+                            <span class="app-tag">News Sites</span>
+                        </div>
+                    </li>
+                </ul>
+
+                <h3 style="margin-top: 32px;">Schedule New Sabbath</h3>
+                <div class="form-group">
+                    <label>Day of Week</label>
+                    <select id="sabbathDay">
+                        <option>Sunday</option>
+                        <option>Monday</option>
+                        <option>Tuesday</option>
+                        <option>Wednesday</option>
+                        <option>Thursday</option>
+                        <option>Friday</option>
+                        <option>Saturday</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label>Start Time</label>
+                    <input type="time" id="sabbathStart" value="08:00">
+                </div>
+
+                <div class="form-group">
+                    <label>End Time</label>
+                    <input type="time" id="sabbathEnd" value="20:00">
+                </div>
+
+                <div class="form-group">
+                    <label>Apps/Sites to Block (comma-separated)</label>
+                    <input type="text" id="sabbathApps" placeholder="Social Media, Email, News Sites">
+                </div>
+
+                <button onclick="addSabbath()">Schedule Sabbath</button>
+            </div>
+        </div>
+
+        <!-- Focus Session View -->
+        <div id="focusView" class="view">
+            <button class="back-button" onclick="showView('homeView')">← RETURN TO MONASTERY</button>
+            
+            <div class="content-card">
+                <h2>Focus Sessions</h2>
+                
+                <div class="session-info" id="sessionInfo">
+                    Session <span id="currentSession">1</span> of 4
+                </div>
+
+                <div class="timer-display">
+                    <div class="timer-circle" id="timerDisplay">25:00</div>
+                    <div class="timer-label" id="timerLabel">Ready to begin</div>
+                    
+                    <div class="timer-controls">
+                        <button onclick="startTimer()" id="startBtn">Start Session</button>
+                        <button class="secondary" onclick="pauseTimer()" id="pauseBtn" style="display: none;">Pause</button>
+                        <button class="secondary" onclick="resetTimer()">Reset</button>
+                    </div>
+                </div>
+
+                <div class="form-group" style="max-width: 500px; margin: 32px auto 0;">
+                    <label>Focus Intention (optional)</label>
+                    <input type="text" id="focusIntention" placeholder="What will you focus on?">
+                </div>
+
+                <h3 style="margin-top: 40px;">Customize Intervals</h3>
+                <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 16px;">
+                    <div class="form-group">
+                        <label>Work Duration (min)</label>
+                        <input type="number" id="workDuration" value="25" min="1" max="60">
+                    </div>
+                    <div class="form-group">
+                        <label>Short Break (min)</label>
+                        <input type="number" id="shortBreak" value="5" min="1" max="15">
+                    </div>
+                    <div class="form-group">
+                        <label>Long Break (min)</label>
+                        <input type="number" id="longBreak" value="15" min="5" max="30">
+                    </div>
+                </div>
+
+                <h3 style="margin-top: 32px;">Recent Sessions</h3>
+                <div id="sessionHistory">
+                    <div class="journal-entry">
+                        <div class="journal-meta">November 6, 2025 - Session 3</div>
+                        <div class="journal-content"><strong>Intention:</strong> Reading philosophy texts<br><strong>Duration:</strong> 25 minutes ✓ Completed</div>
+                    </div>
+                    <div class="journal-entry">
+                        <div class="journal-meta">November 6, 2025 - Session 2</div>
+                        <div class="journal-content"><strong>Intention:</strong> Deep work on research proposal<br><strong>Duration:</strong> 25 minutes ✓ Completed</div>
+                    </div>
+                    <div class="journal-entry">
+                        <div class="journal-meta">November 6, 2025 - Session 1</div>
+                        <div class="journal-content"><strong>Intention:</strong> Deep work on research proposal<br><strong>Duration:</strong> 25 minutes ✓ Completed</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Screen Time View -->
+        <div id="screenTimeView" class="view">
+            <button class="back-button" onclick="showView('homeView')">← RETURN TO MONASTERY</button>
+            
+            <div class="content-card">
+                <h2>Screen Time Awareness</h2>
+                
+                <div class="privacy-notice">
+                    📱 <strong>Local Data Only:</strong> All screen time data is stored on your device and never leaves it. This information is for your awareness and reflection.
+                </div>
+
+                <h3>Today's Usage - November 7, 2025</h3>
+                <div class="chart-container">
+                    <div class="bar-chart" id="todayChart">
+                        <div class="bar-item">
+                            <div class="bar-label">Work Apps</div>
+                            <div class="bar-visual" style="width: 75%;">180 minutes</div>
+                        </div>
+                        <div class="bar-item">
+                            <div class="bar-label">Reading</div>
+                            <div class="bar-visual" style="width: 25%; background: var(--color-blue-grey);">60 minutes</div>
+                        </div>
+                        <div class="bar-item">
+                            <div class="bar-label">Social Media</div>
+                            <div class="bar-visual" style="width: 18%; background: var(--color-terracotta);">45 minutes</div>
+                        </div>
+                    </div>
+                </div>
+
+                <h3 style="margin-top: 32px;">Yesterday - November 6, 2025</h3>
+                <div class="chart-container">
+                    <div class="bar-chart">
+                        <div class="bar-item">
+                            <div class="bar-label">Work Apps</div>
+                            <div class="bar-visual" style="width: 87%;">210 minutes</div>
+                        </div>
+                        <div class="bar-item">
+                            <div class="bar-label">Social Media</div>
+                            <div class="bar-visual" style="width: 15%; background: var(--color-terracotta);">38 minutes</div>
+                        </div>
+                    </div>
+                </div>
+
+                <h3 style="margin-top: 32px;">Weekly Comparison</h3>
+                <div class="chart-container">
+                    <div style="text-align: center; padding: 20px;">
+                        <p style="font-size: 1.1rem; margin-bottom: 16px;">This Week vs Last Week</p>
+                        <div style="display: flex; justify-content: center; gap: 40px; flex-wrap: wrap;">
+                            <div>
+                                <div style="font-size: 2rem; color: var(--color-sage);">6.5 hrs</div>
+                                <div style="font-size: 0.9rem; opacity: 0.7;">Daily Average (This Week)</div>
+                            </div>
+                            <div>
+                                <div style="font-size: 2rem; color: var(--color-blue-grey);">7.2 hrs</div>
+                                <div style="font-size: 0.9rem; opacity: 0.7;">Daily Average (Last Week)</div>
+                            </div>
+                        </div>
+                        <p style="margin-top: 16px; color: var(--color-sage); font-weight: 500;">↓ 10% reduction in screen time</p>
+                    </div>
+                </div>
+
+                <button onclick="exportScreenTime()" style="margin-top: 24px;">Export Screen Time Data (CSV)</button>
+            </div>
+        </div>
+
+        <!-- Mindful Unlock View -->
+        <div id="unlockView" class="view">
+            <button class="back-button" onclick="showView('homeView')">← RETURN TO MONASTERY</button>
+            
+            <div class="content-card">
+                <h2>Mindful Unlock Prompts</h2>
+                
+                <div class="contemplative-message">
+                    "Between stimulus and response there is a space. In that space is our power to choose our response."
+                </div>
+
+                <h3>How It Works</h3>
+                <p style="line-height: 1.8; margin-bottom: 24px;">
+                    Before accessing apps you've marked as potentially distracting, Lucida will pause and ask you to reflect on your intention. This brief moment of awareness helps you make conscious choices about your digital engagement.
+                </p>
+
+                <h3>Configure Prompted Apps</h3>
+                <div class="form-group">
+                    <label>Apps/Sites to Prompt (comma-separated)</label>
+                    <input type="text" id="promptedApps" value="Social Media, News Sites, Video Streaming" placeholder="Social Media, News Sites">
+                </div>
+
+                <button onclick="savePromptedApps()">Save Configuration</button>
+
+                <h3 style="margin-top: 32px;">Try a Sample Prompt</h3>
+                <button class="secondary" onclick="showUnlockPrompt('Social Media')">Simulate Unlock Prompt</button>
+
+            </div>
+        </div>
+
+        <!-- Old Lucida Journal View (hidden) -->
+        <div id="journalView" class="view">
+            <button class="back-button" onclick="showView('homeView')">← RETURN TO MONASTERY</button>
+            
+            <div class="content-card">
+                <h2>Offline Journal</h2>
+                
+                <div class="privacy-notice">
+                    ✍️ <strong>Your Thoughts Stay Private:</strong> Journal entries are stored locally on your device. No cloud sync, ever.
+                </div>
+
+                <h3>New Entry</h3>
+                <div class="form-group">
+                    <textarea id="journalText" placeholder="What are you reflecting on today?"></textarea>
+                </div>
+                <button onclick="saveJournalEntry()">Save Entry</button>
+
+                <h3 style="margin-top: 40px;">Recent Entries</h3>
+                <div id="journalEntries">
+                    <div class="journal-entry">
+                        <div class="journal-meta">November 6, 2025 at 9:30 AM</div>
+                        <div class="journal-content">This morning I noticed how automatically I reach for my phone. The mindful unlock prompt made me pause and realize I didn't actually need to check anything. Just habitual reaching. Interesting to observe this pattern without judgment.</div>
+                    </div>
+                    <div class="journal-entry">
+                        <div class="journal-meta">November 5, 2025 at 9:15 PM</div>
+                        <div class="journal-content">Completed three focused sessions today. The contemplative breaks made such a difference - actually stepping away from the screen instead of just switching tasks. Felt more present during dinner afterward.</div>
+                    </div>
+                </div>
+
+                <button class="secondary" onclick="exportJournal()" style="margin-top: 24px;">Export Journal Entries</button>
+            </div>
+        </div>
+
+        <!-- Old Lucida Export View (hidden) -->
+        <div id="exportView" class="view">
+            <button class="back-button" onclick="showView('homeView')">← RETURN TO MONASTERY</button>
+            
+            <div class="content-card">
+                <h2>Data Sovereignty &amp; Export</h2>
+                
+                <div class="data-statement">
+                    <h3 style="margin-bottom: 16px;">Your Data, Your Control</h3>
+                    <p style="margin-bottom: 12px;">
+                        Lucida is built on principles of complete data sovereignty. Every piece of information you generate—focus sessions, screen time logs, journal entries, and sabbath schedules—is stored exclusively on your device using your browser's local storage.
+                    </p>
+                    <p style="margin-bottom: 12px;">
+                        <strong>What this means:</strong>
+                    </p>
+                    <ul style="margin-left: 24px; line-height: 1.8;">
+                        <li>No data ever leaves your device</li>
+                        <li>No external servers or cloud storage</li>
+                        <li>No analytics or tracking of any kind</li>
+                        <li>No third-party access to your information</li>
+                        <li>You can export everything at any time</li>
+                        <li>You can delete all data with one click</li>
+                    </ul>
+                    <p style="margin-top: 12px;">
+                        Your digital wellbeing journey belongs to you alone.
+                    </p>
+                </div>
+
+                <h3>Export Your Data</h3>
+                <p style="margin-bottom: 16px; opacity: 0.8;">Download your data as CSV files for backup or analysis in other tools.</p>
+                
+                <div class="export-buttons">
+                    <button onclick="exportFocusSessions()">📊 Export Focus Sessions</button>
+                    <button onclick="exportScreenTime()">📱 Export Screen Time</button>
+                    <button onclick="exportJournal()">📝 Export Journal</button>
+                    <button onclick="exportSabbaths()">🌙 Export Sabbath Schedules</button>
+                    <button onclick="exportAllData()">💾 Export All Data</button>
+                </div>
+
+                <h3 style="margin-top: 40px;">Manage Local Data</h3>
+                <p style="margin-bottom: 16px; opacity: 0.8;">Clear all locally stored data. This action cannot be undone.</p>
+                <button class="danger" onclick="clearAllData()">🗑️ Clear All Local Data</button>
+
+                <div class="privacy-notice" style="margin-top: 32px;">
+                    <strong>Technical Note:</strong> This web demo uses browser localStorage for demonstration purposes. In a full native app implementation, data would be stored in encrypted local databases on your device with enhanced security measures.
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+
+    <script src="app.js"></script>
+</body>
+</html>
